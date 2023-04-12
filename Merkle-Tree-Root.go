@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"crypto/sha256"
 	"encoding/hex"
 	"fmt"
@@ -47,10 +48,10 @@ func computeMerkleRoot(transactions [][]byte) []byte {
 		if len(nodes)%2 != 0 {
 			nodes = append(nodes, nodes[len(nodes)-1])
 		}
-		var level []byte
+		var level [][]byte // change to slice of byte slices
 		for i := 0; i < len(nodes); i += 2 {
 			hash := sha256.Sum256(append(nodes[i], nodes[i+1]...))
-			level = append(level, hash[:]...)
+			level = append(level, hash[:]) // append to slice of byte slices
 		}
 		nodes = level
 	}
